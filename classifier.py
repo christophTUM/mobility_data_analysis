@@ -1,15 +1,13 @@
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
-import pandas as pd
-import numpy as np
-import matplotlib.pyplot as plt
 import helpers as h
 
 
 # Get Features and labels
-INPUT_FEATURES = ["mean_speed", "max_speed", "mean_accel", "max_accel"]
-data_df, track_df = h.get_dataframes()
-features, labels, label_names = h.get_features_labels(input_features=INPUT_FEATURES, data_df=data_df, track_df=track_df)
+INPUT_FEATURES = ["mean_speed", "max_speed", "mean_accel", "max_accel", "bus_count", "sub_count"]
+data_df, tracks_df = h.get_dataframes()
+features, labels, label_names = h.get_features_labels(input_features=INPUT_FEATURES,
+                                                      data_df=data_df, track_df=tracks_df)
 
 
 X_train, X_test, y_train, y_test = train_test_split(
