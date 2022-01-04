@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 # Declare file paths
 ALL_DATA = "data/20211219_01_all_data.csv"
 TRACKS = "data/20211214_01_all_tracks.csv"
-BUFFER_RADIUS = 25
+BUFFER_RADIUS = 50
 
 
 def get_dataframes():
@@ -27,17 +27,15 @@ def get_dataframes():
     return all_data_df, tracks_df
 
 
-def get_features_labels(input_features, data_df, track_df):
+def get_features_labels(input_features, data_df, tracks_df):
     le = preprocessing.LabelEncoder()
-    le.fit(data_df["modality"].values)
-    le.fit(track_df["modality"].values)
-    data_df["modality_numbers"] = le.transform(data_df["modality"].values)
-    track_df["modality_numbers"] = le.transform(track_df["modality"].values)
+    le.fit(tracks_df["modality"].values)
+    tracks_df["modality_numbers"] = le.transform(tracks_df["modality"].values)
 
-    features = track_df[input_features]
-    labels = track_df[["modality_numbers"]]
+    features = tracks_df[input_features]
+    labels = tracks_df[["modality_numbers"]]
 
-    label_names = np.sort(track_df["modality"].unique())
+    label_names = np.sort(tracks_df["modality"].unique())
 
     return features, labels, label_names
 
