@@ -8,7 +8,7 @@ import warnings
 from shapely.errors import ShapelyDeprecationWarning
 
 
-# Get dataframe with track id and count intersections with indicator buffers
+# Count intersections of GIS points with buffer of single track points
 def add_indicator_count_to_tracks_df(track_id: int, data_df, tracks_gdf, bus_df, sub_df):
     time_start = tracks_gdf["time_start"][track_id]
     time_stop = tracks_gdf["time_stop"][track_id]
@@ -30,12 +30,15 @@ def add_indicator_count_to_tracks_df(track_id: int, data_df, tracks_gdf, bus_df,
 
     # Get GDF with indicators and count when indicator lies within buffer area
     bus_gdf, sub_gdf = bus_df, sub_df
-    tracks_gdf.loc[track_id, "bus_count"] = len(gpd.sjoin(bus_gdf, single_track_gdf, how="inner", op="within").index)
-    tracks_gdf.loc[track_id, "sub_count"] = len(gpd.sjoin(sub_gdf, single_track_gdf, how="inner", op="within").index)
+    tracks_gdf.loc[track_id, "bus_count"] = (len(gpd.sjoin(bus_gdf, single_track_gdf, how="inner", op="within").index) /
+                                             len(single_track_gdf.index))
+    tracks_gdf.loc[track_id, "sub_count"] = (len(gpd.sjoin(sub_gdf, single_track_gdf, how="inner", op="within").index) /
+                                             len(single_track_gdf.index))
 
     return tracks_gdf
 
 
+# Return GIS points of bus and subway stations via Overpass API
 def get_indicators_gdf():
     print("-- Starting GIS Extraction --")
     rows_list = []
@@ -79,11 +82,11 @@ def get_indicators_gdf():
 
 
 def main(data_gdf: gpd.GeoDataFrame, tracks_gdf: gpd.GeoDataFrame):
-
     time_main_start = time.time()
     print("--- Starting main GIS Script ---")
 
-    bus_gdf, sub_gdf = get_indicators_gdf()
+    # bus_gdf, sub_gdf = get_indicators_gdf()
+    bus_gdf, sub_gdf = [], []
     print("-- Starting to add GIS info to tracks. --")
 
     for i in range(0, len(tracks_gdf)):
@@ -99,5 +102,3 @@ def main(data_gdf: gpd.GeoDataFrame, tracks_gdf: gpd.GeoDataFrame):
 
 if __name__ == "__main__":
     print("Starting GIS Extraction Main.")
-
-

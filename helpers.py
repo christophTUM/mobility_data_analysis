@@ -4,19 +4,22 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 
-# Declare file paths
-ALL_DATA = "data/20211219_01_all_data.csv"
-TRACKS = "data/20211214_01_all_tracks.csv"
+# Declare file paths and constants.
+PORT = 5050
+SERVER = "127.0.0.1"
+SAVE_PATH_MODEL = "./rf_model.joblib"
+ALL_DATA = "data/20220106_01_all_data.csv"
+TRACKS = "data/20220106_01_all_tracks.csv"
 BUFFER_RADIUS = 50
+INPUT_FEATURES = ["track_distance", "mean_speed", "var_speed", "median_speed", "p95_speed", "stoprate", "mean_accel",
+                  "median_accel", "p95_accel", "var_accel"]
 
 
+# Import Dataframes from .csv file TODO Not necessary if scripts are merged
 def get_dataframes():
     all_data_df = pd.read_csv(ALL_DATA)
 
-    tracks_df = pd.read_csv(TRACKS,
-                            header=0,
-                            usecols=["modality", "time_start", "time_stop", "mean_speed", "max_speed",
-                                     "mean_accel", "max_accel"])
+    tracks_df = pd.read_csv(TRACKS)
 
     tracks_df["time_start"] = tracks_df.time_start.astype('datetime64[ns]')
     tracks_df["time_stop"] = tracks_df.time_stop.astype('datetime64[ns]')
@@ -27,7 +30,8 @@ def get_dataframes():
     return all_data_df, tracks_df
 
 
-def get_features_labels(input_features, data_df, tracks_df):
+# Return features and convert labels to number. Only used for training phase.
+def get_features_labels(input_features, tracks_df):
     le = preprocessing.LabelEncoder()
     le.fit(tracks_df["modality"].values)
     tracks_df["modality_numbers"] = le.transform(tracks_df["modality"].values)
@@ -40,7 +44,7 @@ def get_features_labels(input_features, data_df, tracks_df):
     return features, labels, label_names
 
 
-# Calculate statistics
+# Calculate and print statistics. Only used for training phase.
 def print_statistics(features, y_true, y_pred, importance, label_names):
     cols = features.columns.values
     importance_list = list(sorted(zip(cols, importance), key=lambda x: x[1], reverse=True))
@@ -56,6 +60,6 @@ def print_statistics(features, y_true, y_pred, importance, label_names):
     for pair in importance_list:
         print("%s: %.2f" % (pair[0], pair[1]))
 
-    disp = ConfusionMatrixDisplay.from_predictions(y_true, y_pred)
+    disp = ConfusionMatrixDisplay.from_predictions(y_true, y_pred, display_labels=label_names)
     disp.plot()
     plt.show()
