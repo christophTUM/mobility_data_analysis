@@ -6,10 +6,10 @@ import matplotlib.pyplot as plt
 
 # Declare file paths and constants.
 PORT = 5050
-SERVER = "127.0.0.1"
-SAVE_PATH_MODEL = "./rf_model.joblib"
-ALL_DATA = "data/20220106_01_all_data.csv"
-TRACKS = "data/20220106_01_all_tracks.csv"
+SERVER = "192.168.2.108"
+SAVE_PATH_MODEL = "model/rf_model.joblib"
+ALL_DATA = "data/all_data.csv"
+TRACKS = "data/all_tracks.csv"
 BUFFER_RADIUS = 50
 INPUT_FEATURES = ["track_distance", "mean_speed", "var_speed", "median_speed", "p95_speed", "stoprate", "mean_accel",
                   "median_accel", "p95_accel", "var_accel"]

@@ -8,8 +8,7 @@ import joblib
 # Add GIS Info to tracks_df and get features and labels
 data_df, tracks_df = h.get_dataframes()  # Später von Jannis bekommen
 tracks_df = gis.main(data_df, tracks_df)
-features, labels, label_names = h.get_features_labels(input_features=h.INPUT_FEATURES,
-                                                      data_df=data_df, tracks_df=tracks_df)
+features, labels, label_names = h.get_features_labels(input_features=h.INPUT_FEATURES, tracks_df=tracks_df)
 
 
 X_train, X_test, y_train, y_test = train_test_split(

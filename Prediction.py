@@ -1,18 +1,26 @@
-from sklearn.ensemble import RandomForestClassifier
 import helpers as h
-import gis_extraction as g
 import joblib
 import pandas as pd
-import import_script # Jannis' Script
 
 
-# TODO Modifiy once scripts are merged
-# Load Random Forest Model and Tracks Dataframe
-rf = joblib.load(h.SAVE_PATH_MODEL)
-X_predict = import_script.tracks_df[h.INPUT_FEATURES]
+def predict(kpi_dict: dict):
 
-# Statistics
-prediction = rf.predict(X_predict)
-X_predict["modality"] = prediction
+    kpi_df = pd.DataFrame([kpi_dict])
+    kpi_df = kpi_df[h.INPUT_FEATURES]
+    #kpi_list = []
+    #for feature in h.INPUT_FEATURES:
+    #    kpi_list.append(kpi_dict[feature])
 
-X_predict.to_csv("data/tracks_modalities.csv")
+
+    # Load Random Forest Model and Tracks Dataframe
+    rf = joblib.load(h.SAVE_PATH_MODEL)
+    predicted_modality = rf.predict(kpi_df)
+
+    if predicted_modality == 0:
+        predicted_modality = "car"
+    elif predicted_modality == 1:
+        predicted_modality = "pedestrian"
+    else:
+        predicted_modality = "still"
+
+    return predicted_modality  # TODO Return string not int
