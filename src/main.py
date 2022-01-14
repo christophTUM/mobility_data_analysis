@@ -24,10 +24,10 @@ def main(do_loop: bool):
 
         # Read all_tracks.csv as pandas dataframe file if existing. Else create file.
         if os.path.exists(h.FILE_ALL_TRACKS):
-            print('%s exists! Reading file...' % os.path.basename(h.FILE_ALL_TRACKS))
+            print('%s exists! Reading file...' % h.FILE_ALL_TRACKS.name)
             df_all_tracks = pd.read_csv(h.FILE_ALL_TRACKS)
         else:
-            print('%s does not exist! Creating new DF...' % os.path.basename(h.FILE_ALL_TRACKS))
+            print('%s does not exist! Creating new DF...' % h.FILE_ALL_TRACKS.name)
             df_all_tracks = pd.DataFrame(columns=(
                 'track_id', 'len_raw', 'len_dropnageo', 'len_dropcondup', 'time_start', 'time_stop', 'modality',
                 'time_total_s', 'track_distance', 'total_avg_speed', 'mean_speed', 'median_speed', 'var_speed', 'p85_speed',
@@ -36,10 +36,10 @@ def main(do_loop: bool):
 
         # Read all_data.csv as pandas dataframe file if existing. Else create file.
         if os.path.exists(h.FILE_ALL_DATA):
-            print('%s exists! Reading file...' % os.path.basename(h.FILE_ALL_DATA))
+            print('%s exists! Reading file...' % h.FILE_ALL_DATA.name)
             df_all_data = pd.read_csv(h.FILE_ALL_DATA)
         else:
-            print('%s does not exist! Creating new DF...' % os.path.basename(h.FILE_ALL_DATA))
+            print('%s does not exist! Creating new DF...' % h.FILE_ALL_DATA.name)
             df_all_data = pd.DataFrame(columns=('time', 'longitude', 'latitude', 'hdop', 'altitude', 'track_id', 'modality',
                                                'speed_gps', 'geometry', 'time_diff', 'distance_diff', 'speed_clc',
                                                'speed_ma', 'speed_rolling_median', 'speed_rolling_median_kph', 'accel_clc',

@@ -25,7 +25,7 @@ def file_scanner(loop_counter, data_path, data_mod_path, file_type, d_files):
     # Remove files which have been removed from directory
     for key in list(d_files):
         if key not in list_found_files:
-            print('Missing file: %s removed!' % filename)
+            print('Missing file: %s removed!' % key)
             d_files.pop(key, None)
     list_found_files.clear()
     loop_counter += 1
