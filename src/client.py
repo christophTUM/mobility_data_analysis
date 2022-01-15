@@ -1,7 +1,7 @@
 import socket
 import struct
 import helpers as h
-import os
+from pathlib import Path
 
 
 FORMAT = 'utf-8'
@@ -18,10 +18,6 @@ class Client:
         self.client.connect(self.ADDR)
 
     def send(self, serialized_data, filename):
-        #if serialized_data == DISCONNECT_MESSAGE:
-        #    self.client.sendall(struct.pack('>I', len(DISCONNECT_MESSAGE)))
-        #    self.client.sendall(DISCONNECT_MESSAGE.encode(FORMAT))
-        #else:
         filename_header = f"{len(filename):<{10}}".encode("utf-8")
         self.client.send(filename_header + filename)
         self.client.sendall(struct.pack('>I', len(serialized_data)))
@@ -30,7 +26,10 @@ class Client:
 
 if __name__ == "__main__":
     _client = Client()
-    path = "model/track_1500000312376.pkl"
-    with open(path, 'rb') as f:
-        filename = os.path.basename(path).encode("utf-8")
-        _client.send(f.read(), filename)
+    dir_with_tracks = Path("data/tracks/")
+
+    for file in dir_with_tracks.glob('*.*'):
+        if not file.name == ".DS_Store":
+            with open(file, 'rb') as f:
+                f_name = file.name.encode("utf-8")
+                _client.send(f.read(), f_name)

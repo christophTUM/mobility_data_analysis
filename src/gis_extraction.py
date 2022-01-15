@@ -29,10 +29,10 @@ def add_indicator_count_to_tracks_df(track_id: int, data_df, tracks_gdf, bus_df,
     single_track_gdf = single_track_gdf[["time", "modality", "geometry"]]
 
     # Get GDF with indicators and count when indicator lies within buffer area
-    tracks_gdf.loc[track_id, "bus_count"] = (len(gpd.sjoin(bus_df, single_track_gdf, how="inner", op="within").index) /
-                                             len(single_track_gdf.index))
-    tracks_gdf.loc[track_id, "sub_count"] = (len(gpd.sjoin(sub_df, single_track_gdf, how="inner", op="within").index) /
-                                             len(single_track_gdf.index))
+    #tracks_gdf.loc[track_id, "bus_count"] = (len(gpd.sjoin(bus_df, single_track_gdf, how="inner", op="within").index) /
+    #                                         len(single_track_gdf.index))
+    #tracks_gdf.loc[track_id, "sub_count"] = (len(gpd.sjoin(sub_df, single_track_gdf, how="inner", op="within").index) /
+    #                                         len(single_track_gdf.index))
 
     return tracks_gdf
 

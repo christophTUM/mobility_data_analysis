@@ -4,6 +4,7 @@ import pandas as pd
 import io
 import struct
 import helpers as h
+from pathlib import Path
 
 
 class Server:
@@ -30,7 +31,7 @@ class Server:
 
         connected = True
         while connected:
-            data, filename = self.receiveDataHelper(conn)
+            data, filename = self.receive_data_helper(conn)
             if not data:
                 connected = False
                 continue
@@ -38,13 +39,14 @@ class Server:
             if data is not None:
                 print("Received data!")
                 vehicle_id, track_id, modality, modality_precision, df = pd.read_pickle(io.BytesIO(data))
-                df.to_pickle(f"data/tracks/{filename}")
-                print("Saved pickle file!")
+                df.to_pickle(Path.cwd().parent.joinpath(Path(f"data/test/{filename}")))
+                print(f"Saved {filename}!")
 
         print(f"[CLOSING CONNECTION] {addr} disconnected.")
         conn.close()
 
-    def receiveDataHelper(self, conn):
+    @staticmethod
+    def receive_data_helper(conn):
         filename_header = conn.recv(10)
         if not len(filename_header):
             return False, ""
