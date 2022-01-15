@@ -39,10 +39,10 @@ def predict(kpi_dict: dict) -> str:
 
     # Load Random Forest Model and Tracks Dataframe
     rf = joblib.load(h.SAVE_PATH_MODEL)
-    predicted_modality = rf.predict(kpi_df)
+    predicted_modality = rf.predict(kpi_df)[0]
 
     # Dictionary for labels from model with label names as values
-    label_names = h.get_features_labels(h.INPUT_FEATURES, h.get_dataframes()[1])[2]
+    label_names = ["car", "pedestrian", "still"]  # h.get_features_labels(h.INPUT_FEATURES, h.get_dataframes()[1])[2]
     labels = rf.classes_
     label_dict = dict(zip(labels, label_names))
 

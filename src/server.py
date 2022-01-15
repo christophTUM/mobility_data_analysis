@@ -39,7 +39,7 @@ class Server:
             if data is not None:
                 print("Received data!")
                 vehicle_id, track_id, modality, modality_precision, df = pd.read_pickle(io.BytesIO(data))
-                df.to_pickle(Path.cwd().parent.joinpath(Path(f"data/test/{filename}")))
+                df.to_pickle(Path.cwd().parent.joinpath(Path(f"data/tracks/{filename}")))
                 print(f"Saved {filename}!")
 
         print(f"[CLOSING CONNECTION] {addr} disconnected.")

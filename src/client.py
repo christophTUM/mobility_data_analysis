@@ -26,7 +26,7 @@ class Client:
 
 if __name__ == "__main__":
     _client = Client()
-    dir_with_tracks = Path("data/tracks/")
+    dir_with_tracks = Path.cwd().parent.joinpath(Path("data/test/"))
 
     for file in dir_with_tracks.glob('*.*'):
         if not file.name == ".DS_Store":

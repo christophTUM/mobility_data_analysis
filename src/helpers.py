@@ -9,12 +9,12 @@ from pathlib import Path
 PORT = 5050
 BUFFER_RADIUS = 50
 SERVER = "127.0.0.1"
-DATA_PATH = 'data'
+DATA_PATH = 'data/tracks'
 DATA_MOD_PATH = Path("data/mod")
 DATA_RESULTS = Path("data/results")
-FILE_ALL_DATA = Path("data/results/all_data.csv")
-FILE_ALL_TRACKS = Path("data/results/all_tracks.csv")
-FILE_ALL_MODALITIES = Path("data/results/all_modalities.csv")
+FILE_ALL_DATA = Path("/Users/christoph/Dropbox/MDA_Projekt/Dashboard_presentation/all_data.csv")
+FILE_ALL_TRACKS = Path("/Users/christoph/Dropbox/MDA_Projekt/Dashboard_presentation/all_tracks.csv")
+FILE_ALL_MODALITIES = Path("/Users/christoph/Dropbox/MDA_Projekt/Dashboard_presentation/all_modalities.csv")
 FILE_TYPE = '.pkl'
 SAVE_PATH_MODEL = Path("data/model/rf_model.joblib")
 SAVE_PATH_MATRIX = Path("data/model/")  # Name and file type gets declared later (looping)
@@ -66,9 +66,9 @@ def print_statistics(features, y_true, y_pred, importance, label_names) -> None:
     for pair in importance_list:
         print("%s: %.2f" % (pair[0], pair[1]))
 
-    # Create 3 Confusion Matrices with different normalized prinicples
+    # Create 3 Confusion Matrices with different normalized principles
     normalize_list = [None, "true", "pred"]
-    title_list = ["Not normalized", "Normalized: True", "Normalized: Pred"]
+    title_list = ["Not_normalized", "Recall", "Precision"]
     dict_normalize = dict(zip(normalize_list, title_list))
 
     for element in normalize_list:
@@ -76,9 +76,8 @@ def print_statistics(features, y_true, y_pred, importance, label_names) -> None:
         title = dict_normalize[element]
         disp.ax_.set_title(title)
         disp.plot()
-        if element is None:
-            element = "none"
-        plt.savefig(SAVE_PATH_MATRIX.joinpath("Confusion_Matrix_" + element + ".png"))
+
+        plt.savefig(SAVE_PATH_MATRIX.joinpath("Confusion_Matrix_" + title + ".png"))
         plt.show()
 
 
