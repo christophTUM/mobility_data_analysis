@@ -3,7 +3,7 @@ import geopandas as gpd
 import numpy as np
 from datetime import datetime, timedelta
 from helpers import calculate_distance_points
-import prediction as p
+import classifier as clf
 import warnings
 from shapely.errors import ShapelyDeprecationWarning
 
@@ -135,7 +135,7 @@ def track_analysis(track_id, filepath, filepath_save, filepath_cont):
                 }
 
     # Modality detection Christoph
-    predicted_modality = p.predict(kpi_dict=kpi_dict)
+    predicted_modality = clf.predict(kpi_dict=kpi_dict)
     kpi_dict["modality"] = predicted_modality
     gdf_track_data['modality'] = predicted_modality
 

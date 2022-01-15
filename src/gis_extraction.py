@@ -9,7 +9,7 @@ from shapely.errors import ShapelyDeprecationWarning
 
 
 # Count intersections of GIS points with buffer of single track points
-def add_indicator_count_to_tracks_df(track_id: int, data_df, tracks_gdf, bus_df, sub_df):
+def add_indicator_count_to_tracks_df(track_id: int, data_df, tracks_gdf, bus_df, sub_df) -> gpd.GeoDataFrame:
     time_start = tracks_gdf["time_start"][track_id]
     time_stop = tracks_gdf["time_stop"][track_id]
 
@@ -85,13 +85,13 @@ def main(data_gdf: gpd.GeoDataFrame, tracks_gdf: gpd.GeoDataFrame):
     print("--- Starting main GIS Script ---")
 
     bus_gdf, sub_gdf = get_indicators_gdf()
-    #bus_gdf, sub_gdf = [], []
     print("-- Starting to add GIS info to tracks. --")
 
     for i in range(0, len(tracks_gdf)):
-        tracks_gdf = add_indicator_count_to_tracks_df(i, data_gdf, tracks_gdf, bus_gdf, sub_gdf)
+        # tracks_gdf = add_indicator_count_to_tracks_df(i, data_gdf, tracks_gdf, bus_gdf, sub_gdf)
         if (i % 20) == 0 or i == len(tracks_gdf) - 1:
-            print("- Finished Track %d. -" % i)
+            # print("- Finished Track %d. -" % i)
+            pass
 
     print("-- Finished adding info to all tracks. --")
     print("--- Finished main GIS Script in %.2f seconds ---" % float(time.time() - time_main_start))

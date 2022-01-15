@@ -17,8 +17,9 @@ FILE_ALL_TRACKS = Path("data/results/all_tracks.csv")
 FILE_ALL_MODALITIES = Path("data/results/all_modalities.csv")
 FILE_TYPE = '.pkl'
 SAVE_PATH_MODEL = Path("data/model/rf_model.joblib")
-INPUT_FEATURES = ["track_distance", "mean_speed", "var_speed", "median_speed", "p95_speed", "stoprate", "mean_accel",
-                  "median_accel", "p95_accel", "var_accel"]
+SAVE_PATH_MATRIX = Path("data/model/")  # Name and file type gets declared later (looping)
+INPUT_FEATURES = ["track_distance", "mean_speed", "var_speed", "median_speed", "p85_speed", "stoprate",
+                  "p85_accel", "var_accel"]
 
 
 # Import Dataframes from .csv file
@@ -44,14 +45,13 @@ def get_features_labels(input_features, tracks_df):
 
     features = tracks_df[input_features]
     labels = tracks_df[["modality_numbers"]]
-
     label_names = np.sort(tracks_df["modality"].unique())
 
     return features, labels, label_names
 
 
 # Calculate and print statistics. Only used for training phase.
-def print_statistics(features, y_true, y_pred, importance, label_names):
+def print_statistics(features, y_true, y_pred, importance, label_names) -> None:
     cols = features.columns.values
     importance_list = list(sorted(zip(cols, importance), key=lambda x: x[1], reverse=True))
     report = classification_report(y_true=y_true, y_pred=y_pred, target_names=label_names, output_dict=True)
@@ -66,9 +66,20 @@ def print_statistics(features, y_true, y_pred, importance, label_names):
     for pair in importance_list:
         print("%s: %.2f" % (pair[0], pair[1]))
 
-    disp = ConfusionMatrixDisplay.from_predictions(y_true, y_pred, display_labels=label_names)
-    disp.plot()
-    plt.show()
+    # Create 3 Confusion Matrices with different normalized prinicples
+    normalize_list = [None, "true", "pred"]
+    title_list = ["Not normalized", "Normalized: True", "Normalized: Pred"]
+    dict_normalize = dict(zip(normalize_list, title_list))
+
+    for element in normalize_list:
+        disp = ConfusionMatrixDisplay.from_predictions(y_true, y_pred, normalize=element, display_labels=label_names)
+        title = dict_normalize[element]
+        disp.ax_.set_title(title)
+        disp.plot()
+        if element is None:
+            element = "none"
+        plt.savefig(SAVE_PATH_MATRIX.joinpath("Confusion_Matrix_" + element + ".png"))
+        plt.show()
 
 
 def lat_lon_2_m(latitude_1, longitude_1, latitude_2, longitude_2):
@@ -93,8 +104,8 @@ def calculate_distance_points(points):
         d = lat_lon_2_m(
             points[i].x,
             points[i].y,
-            points[i+1].x,
-            points[i+1].y,)
+            points[i + 1].x,
+            points[i + 1].y, )
         # append distance to array
         distance[i + 1] = d
     return distance

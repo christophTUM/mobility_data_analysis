@@ -14,11 +14,11 @@ git clone git@github.com:christophTUM/mobility_data_analysis.git
 │   └── tracks
 │       ├── (multiple test tracks)
 ├── src
+│   ├── classifier.py
 │   ├── client.py
 │   ├── gis_extraction.py
 │   ├── helpers.py
 │   ├── main.py
-│   ├── prediction.py
 │   ├── random_forest_model.py
 │   ├── server.py
 │   ├── utilities_analysis.py
