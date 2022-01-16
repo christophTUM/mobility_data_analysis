@@ -66,11 +66,16 @@ def track_analysis(track_id, filepath, filepath_save, filepath_cont):
     # ######### CLC on data ############################################################################################
     window_ma = 15
     window_rw = 5
+    speed_treshold = 230 / 3.6  # 63.8 m/s or 230 kph
     gdf_track_data['time_diff'] = gdf_track_data.time - gdf_track_data.time.shift(1)
     gdf_track_data.loc[gdf_track_data.iloc[0].name, 'time_diff'] = timedelta(seconds=0)
     gdf_track_data['distance_diff'] = calculate_distance_points(gdf_track_data.geometry)
     gdf_track_data['speed_clc'] = (gdf_track_data.distance_diff / (gdf_track_data.time_diff.dt.total_seconds()))
-    gdf_track_data.loc[gdf_track_data.iloc[0].name, 'speed_clc'] = 0.0
+    gdf_track_data.loc[gdf_track_data.iloc[0].name, 'speed_clc'] = 0.0  # first datapoint to be zero, otherwise NaN
+    speed_values_above_tres = gdf_track_data[gdf_track_data.speed_clc < speed_treshold].count().sum()
+    if speed_values_above_tres >= 2:  # filter abnormal speeds
+        gdf_track_data = gdf_track_data[gdf_track_data.speed_clc < speed_treshold]
+        gdf_track_data['time_diff'] = gdf_track_data.time - gdf_track_data.time.shift(1)  # reclc time when if sth drop
     if len_dropcondup <= window_ma:
         gdf_track_data['speed_ma'] = np.empty(len_dropcondup)
     else:
