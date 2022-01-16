@@ -9,7 +9,12 @@ def file_scanner(loop_counter, data_path, data_mod_path, file_type, d_files):
     # Walk through dir and add new files to dictionary
     for dirpath, dirnames, filenames in os.walk(data_path):
         for filename in [f for f in filenames if f.endswith(file_type)]:
-            file_id = filename.replace(file_type, '')
+            if '.pkl' in filename:  # --> import with FTM data:
+                file_id = filename.replace('.pkl' , '')
+            elif '.csv' in filename:  # --> import with London data:
+                file_id = filename.replace('.csv', '')
+            else:
+                raise FileNotFoundError
             list_found_files.append(file_id)
             if file_id in d_files:
                 pass

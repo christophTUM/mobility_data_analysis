@@ -11,15 +11,23 @@ from shapely.errors import ShapelyDeprecationWarning
 def track_importer(files):
     for key in files:
         fp = files[key]['path']
-        vehicle_id, track_id, modality, modality_precision, dats = pd.read_pickle(fp)
-        # add Vehicle_ID and track_id and modality as dataframe columns
-        dats['Vehicle_ID'] = vehicle_id
-        dats['track_id'] = track_id
-        # if modality is None and 'Logger' in fp:
-        if modality is None:
-            modality = 'car'
-        dats['modality'] = modality
-        dats['modality_prec'] = modality_precision
+        if '.pkl' in fp:  # --> import with FTM data:
+            vehicle_id, track_id, modality, modality_precision, dats = pd.read_pickle(fp)
+            # add Vehicle_ID and track_id and modality as dataframe columns
+            dats['Vehicle_ID'] = vehicle_id
+            dats['track_id'] = track_id
+            # if modality is None and 'Logger' in fp:
+            if modality is None:
+                modality = 'car'
+            dats['modality'] = modality
+            dats['modality_prec'] = modality_precision
+            dats = dats.rename(columns={'latitude': 'longitude', 'longitude': 'latitude',  # bcuz mixed in data
+                                        'speed': 'speed_gps'})
+            dats = dats[['time', 'longitude', 'latitude', 'hdop', 'altitude', 'track_id', 'modality', 'speed_gps']]
+        elif '.csv' in fp:  # --> import with London data:
+            dats = pd.read_csv(fp)
+            dats = dats.rename(columns={'track': 'track_id'})
+            dats = dats[['time', 'longitude', 'latitude', 'altitude', 'track_id', 'modality']]
         # add source as dataframe columns
         if 'Smartphone' in fp:
             s = 'Smartphone'
@@ -28,9 +36,6 @@ def track_importer(files):
         else:
             s = 'unknown'
         dats['source'] = s
-        dats = dats.rename(columns={'latitude': 'longitude', 'longitude': 'latitude',  # bcuz mixed in data
-                                    'speed': 'speed_gps'})
-        dats = dats[['time', 'longitude', 'latitude', 'hdop', 'altitude', 'track_id', 'modality', 'speed_gps']]
         dats = dats.set_index('time')
         dats.to_csv(files[key]['path_mod'])
 

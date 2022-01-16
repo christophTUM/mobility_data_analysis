@@ -72,4 +72,4 @@ def main(do_loop: bool):
 
 
 if __name__ == "__main__":
-    main(do_loop=True)
+    main(do_loop=False)
