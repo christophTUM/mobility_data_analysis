@@ -34,7 +34,7 @@ def file_scanner(loop_counter, data_path, data_mod_path, file_type, d_files):
 
 
 def track_detector():
-    pass
+    pass  # test
     #all_data['timegap'] = (all_data.time - all_data.time.shift(1,fill_value = 0)).dt.total_seconds()
     #print(len(all_data[all_data.timegap > 1].index.tolist()))
     #all_data[all_data.timegap > 1]
