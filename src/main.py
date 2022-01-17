@@ -19,7 +19,7 @@ def main(do_loop: bool):
 
         # #### File and track splitter / Analysis of the files whether they contain more than one track. Rescan!!
         track_detector(d_files)
-        d_files, loop_counter = file_scanner(loop_counter-1, data_path, data_mod_path, file_type, d_files)
+        d_files, loop_counter = file_scanner(loop_counter-1, h.DATA_PATH, h.DATA_MOD_PATH, h.FILE_TYPE, d_files)
 
         # Import raw data and only use necessary data from that and save to modified csv data.
         track_importer(d_files)
