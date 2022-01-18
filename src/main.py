@@ -49,7 +49,10 @@ def main(do_loop: bool):
                                                'time_id_day_month', 'time_id_kw', 'time_id_month', 'time_id_year'))
 
         # do the calculation stuff:
+        length_allkeys = len(d_files)
+        counter_allkeys = 0
         for key in d_files:
+            print("Analysing file %i of %i." % (counter_allkeys, length_allkeys))
             if key not in df_all_tracks.track_id.tolist():
                 d_dat, gdf_dat = track_analysis(key,
                                                 d_files[key]['path_mod'],
@@ -59,6 +62,7 @@ def main(do_loop: bool):
                 df_all_tracks = df_all_tracks.append(d_dat, ignore_index=True)
                 # append the resampled data to all_data
                 df_all_data = df_all_data.append(gdf_dat, ignore_index=True)
+            counter_allkeys += 1
         df_all_tracks = df_all_tracks.set_index('track_id')
         df_all_tracks.to_csv(h.FILE_ALL_TRACKS)
         df_all_data = df_all_data.set_index('time')
