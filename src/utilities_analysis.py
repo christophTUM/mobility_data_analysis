@@ -15,7 +15,7 @@ def track_importer(files):
             vehicle_id, track_id, modality, modality_precision, dats = pd.read_pickle(fp)
             # add Vehicle_ID and track_id and modality as dataframe columns
             dats['Vehicle_ID'] = vehicle_id
-            dats['track_id'] = track_id
+            dats['track_id'] = key  # OLD: dats['track_id'] = track_id
             # if modality is None and 'Logger' in fp:
             if modality is None:
                 modality = 'car'
@@ -67,6 +67,7 @@ def track_analysis(track_id, filepath, filepath_save, filepath_cont):
     window_ma = 15
     window_rw = 5
     speed_treshold = 230 / 3.6  # 63.8 m/s or 230 kph
+    accel_treshold = 10  # plus minus
     gdf_track_data['time_diff'] = gdf_track_data.time - gdf_track_data.time.shift(1)
     gdf_track_data.loc[gdf_track_data.iloc[0].name, 'time_diff'] = timedelta(seconds=0)
     gdf_track_data['distance_diff'] = calculate_distance_points(gdf_track_data.geometry)
@@ -88,6 +89,14 @@ def track_analysis(track_id, filepath, filepath_save, filepath_cont):
     gdf_track_data['accel_rolling_median'] = gdf_track_data.accel_clc.rolling(window_rw, center=True).median()
     gdf_track_data = gdf_track_data.fillna(
         value={"accel_clc": 0, "speed_rolling_median": 0, "speed_rolling_median_kph": 0, "accel_rolling_median": 0})
+    accel_plus_values_lower_tres = gdf_track_data[
+        gdf_track_data.accel_rolling_median < accel_treshold].count().sum()
+    if accel_plus_values_lower_tres >= 2:  # filter abnormal accels
+        gdf_track_data = gdf_track_data[gdf_track_data.accel_rolling_median < accel_treshold]
+    accel_nega_values_lower_tres = gdf_track_data[
+        gdf_track_data.accel_rolling_median > -accel_treshold].count().sum()
+    if accel_nega_values_lower_tres >= 2:  # filter abnormal accels
+        gdf_track_data = gdf_track_data[gdf_track_data.accel_rolling_median > -accel_treshold]
     # ######### CLC for KPI ############################################################################################
     stoprate_v_treshold = 1  # in m/s
     time_total_s = (time_stop - time_start).total_seconds()

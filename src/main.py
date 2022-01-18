@@ -62,10 +62,10 @@ def main(do_loop: bool):
         df_all_tracks = df_all_tracks.set_index('track_id')
         df_all_tracks.to_csv(h.FILE_ALL_TRACKS)
         df_all_data = df_all_data.set_index('time')
+        df_all_data = df_all_data.dropna(how='all')
         df_all_data.to_csv(h.FILE_ALL_DATA)
 
         # all_modalities.csv: analysis of KPI's for each modality
-        #if len(d_files) != 0:
         if len(df_all_tracks.modality.unique().tolist()) > 2:
             df_all_modalities = modality_analysis(df_all_tracks)
             df_all_modalities.to_csv(h.FILE_ALL_MODALITIES)
