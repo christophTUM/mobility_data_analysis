@@ -1,12 +1,13 @@
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
 import helpers as h
-#import gis_extraction as gis
+# import gis_extraction as gis
 import joblib
 import pandas as pd
 from sklearn.model_selection import RandomizedSearchCV
 from sklearn.model_selection import GridSearchCV
 import numpy as np
+import time
 
 
 def train(n_iter=100, cv=3) -> None:
@@ -44,6 +45,7 @@ def train(n_iter=100, cv=3) -> None:
     combinations = (len(n_estimators) * len(max_features) * len(max_depth) * len(min_samples_split) *
                     len(min_samples_leaf) * len(bootstrap))
     print(f"\n-- Starting RandomizedSearchCV with {combinations} possible combinations. --")
+    time_start = time.time()
 
     # Use the random grid to search for best hyperparameters
     rf = RandomForestClassifier()
@@ -54,7 +56,7 @@ def train(n_iter=100, cv=3) -> None:
           f"fits. This may take some while. ---")
     rf_random.fit(x_train, np.ravel(y_train))
 
-    print("-- Finished RandomizedSearchCV. --")
+    print("-- Finished RandomizedSearchCV in %.2f seconds. --" % (time.time() - time_start))
     rf_params = rf_random.best_params_
 
     # Random grid for GridSearchCV
@@ -83,8 +85,10 @@ def train(n_iter=100, cv=3) -> None:
 
     print(f"--- Fitting {cv} fold for each of {combinations} candidates, totalling {cv * combinations} "
           f"fits. This may take some while. ---")
+    time_start = time.time()
     grid_search.fit(x_train, np.ravel(y_train))
-    print("-- Finished GridSearchCV. Assigned best model as final trained model. --")
+    print("-- Finished GridSearchCV in %.2f seconds. Assigned best model as final trained model. --"
+          % (time.time() - time_start))
 
     # Final trained model from best grid search model.
     rf = grid_search.best_estimator_
