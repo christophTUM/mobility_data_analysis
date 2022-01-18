@@ -7,6 +7,8 @@ import pandas as pd
 
 
 def train() -> None:
+    """Train and save model, return confusion matrices."""
+
     # Add GIS Info to tracks_df and get features and labels
     data_df, tracks_df = h.get_dataframes()
     tracks_df = gis.main(data_df, tracks_df)
@@ -20,7 +22,7 @@ def train() -> None:
     )
 
     # Initialize RFC and train model
-    rf = RandomForestClassifier(n_estimators=100, max_depth=4, max_features=2, random_state=0)
+    rf = RandomForestClassifier(n_estimators=5000, max_depth=10, max_features=5, random_state=0)
     rf.fit(X=x_train, y=y_train.values.ravel())
     importance_list = rf.feature_importances_
 
@@ -33,16 +35,16 @@ def train() -> None:
 
 
 def predict(kpi_dict: dict) -> str:
+    """predicts modality with loaded model and returns it as string."""
 
     kpi_df = pd.DataFrame([kpi_dict])
     kpi_df = kpi_df[h.INPUT_FEATURES]
 
-    # Load Random Forest Model and Tracks Dataframe
     rf = joblib.load(h.SAVE_PATH_MODEL)
     predicted_modality = rf.predict(kpi_df)[0]
 
     # Dictionary for labels from model with label names as values
-    label_names = ["car", "pedestrian", "still"]  # h.get_features_labels(h.INPUT_FEATURES, h.get_dataframes()[1])[2]
+    label_names = ["car", "pedestrian", "still"]
     labels = rf.classes_
     label_dict = dict(zip(labels, label_names))
 

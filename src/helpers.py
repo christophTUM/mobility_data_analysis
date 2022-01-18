@@ -74,10 +74,9 @@ def print_statistics(features, y_true, y_pred, importance, label_names) -> None:
     for element in normalize_list:
         disp = ConfusionMatrixDisplay.from_predictions(y_true, y_pred, normalize=element, display_labels=label_names)
         title = dict_normalize[element]
-        disp.ax_.set_title(title)
-        disp.plot()
+        plt.title(label=title, fontsize=18)
 
-        plt.savefig(SAVE_PATH_MATRIX.joinpath("Confusion_Matrix_" + title + ".png"))
+        plt.savefig(SAVE_PATH_MATRIX.joinpath("Confusion_Matrix_" + title + ".eps"), format="eps")
         plt.show()
 
 

@@ -8,8 +8,9 @@ import warnings
 from shapely.errors import ShapelyDeprecationWarning
 
 
-# Count intersections of GIS points with buffer of single track points
 def add_indicator_count_to_tracks_df(track_id: int, data_df, tracks_gdf, bus_df, sub_df) -> gpd.GeoDataFrame:
+    """Counts intersections of GIS points with buffer of GNSS Points."""
+
     time_start = tracks_gdf["time_start"][track_id]
     time_stop = tracks_gdf["time_stop"][track_id]
 
@@ -37,13 +38,16 @@ def add_indicator_count_to_tracks_df(track_id: int, data_df, tracks_gdf, bus_df,
     return tracks_gdf
 
 
-# Return GIS points of bus and subway stations via Overpass API
 def get_indicators_gdf():
+    """Return GIS points of bus and subway stations via Overpass API"""
+    if True:
+        return [], []
+
     print("-- Starting GIS Extraction --")
     rows_list = []
 
     # Query with bus and subway stations
-    overpass_query_begin = '[out:json]; area["name"="Oberbayern"]->.muc;'
+    overpass_query_begin = '[out:json]; area["name"="München"]->.muc;'
     overpass_query_bus = overpass_query_begin + '(node["highway"="bus_stop"](area.muc););out geom;'
     overpass_query_sub = overpass_query_begin + '(node["railway"="station"]["station"="subway"](area.muc););out geom;'
 
@@ -58,6 +62,7 @@ def get_indicators_gdf():
             break
         except OverpassTooManyRequests:
             print("Encountered TooManyRequests Exception! Restarting...")
+            time.sleep(2)
             continue
 
     # Add lat and lon from response to list and create dataframes
@@ -81,6 +86,8 @@ def get_indicators_gdf():
 
 
 def main(data_gdf: gpd.GeoDataFrame, tracks_gdf: gpd.GeoDataFrame):
+    """Starts main GIS script."""
+
     time_main_start = time.time()
     print("--- Starting main GIS Script ---")
 
