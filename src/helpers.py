@@ -9,7 +9,7 @@ from pathlib import Path
 #
 PORT = 5050
 BUFFER_RADIUS = 50
-SERVER = "127.0.0.1"
+SERVER = "192.168.2.108"
 DATA_PATH = 'data/tracks'
 DATA_MOD_PATH = Path("data/mod")
 DATA_RESULTS = Path("data/results")
