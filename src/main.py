@@ -65,7 +65,8 @@ def main(do_loop: bool):
         df_all_data.to_csv(h.FILE_ALL_DATA)
 
         # all_modalities.csv: analysis of KPI's for each modality
-        if len(d_files) != 0:
+        #if len(d_files) != 0:
+        if len(df_all_tracks.modality.unique().tolist()) > 2:
             df_all_modalities = modality_analysis(df_all_tracks)
             df_all_modalities.to_csv(h.FILE_ALL_MODALITIES)
 
@@ -75,4 +76,4 @@ def main(do_loop: bool):
 
 
 if __name__ == "__main__":
-    main(do_loop=False)
+    main(do_loop=True)

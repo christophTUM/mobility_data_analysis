@@ -22,7 +22,7 @@ def train() -> None:
     )
 
     # Initialize RFC and train model
-    rf = RandomForestClassifier(n_estimators=5000, max_depth=10, max_features=5, random_state=0)
+    rf = RandomForestClassifier(n_estimators=2000, max_depth=10, max_features=5, random_state=0)
     rf.fit(X=x_train, y=y_train.values.ravel())
     importance_list = rf.feature_importances_
 

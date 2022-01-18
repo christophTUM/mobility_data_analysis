@@ -5,6 +5,7 @@ import io
 import struct
 import helpers as h
 from pathlib import Path
+import pickle as p
 
 
 class Server:
@@ -12,7 +13,7 @@ class Server:
     def __init__(self):
         self.server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.PORT = h.PORT
-        self.SERVER = "127.0.0.1"#socket.gethostbyname(socket.gethostname())
+        self.SERVER = "192.168.2.108"#socket.gethostbyname(socket.gethostname())
         self.ADDR = (self.SERVER, self.PORT)
         self.server.bind(self.ADDR)
 
@@ -38,8 +39,10 @@ class Server:
 
             if data is not None:
                 print("Received data!")
-                vehicle_id, track_id, modality, modality_precision, df = pd.read_pickle(io.BytesIO(data))
-                df.to_pickle(Path.cwd().parent.joinpath(Path(f"data/tracks/{filename}")))
+                pkl_list = pd.read_pickle(io.BytesIO(data))
+                # vehicle_id, track_id, modality, modality_precision, df = pd.read_pickle(io.BytesIO(data))
+                # df.to_pickle(Path.cwd().parent.joinpath(Path(f"data/tracks/{filename}")))
+                p.dump(pkl_list, open(Path.cwd().parent.joinpath(Path(f"data/tracks/{filename}")), 'wb'))
                 print(f"Saved {filename}!")
 
         print(f"[CLOSING CONNECTION] {addr} disconnected.")
