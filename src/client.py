@@ -1,19 +1,13 @@
 import socket
 import struct
-import helpers as h
 from pathlib import Path
-
-
-FORMAT = 'utf-8'
-DISCONNECT_MESSAGE = "DISCONNECT"
-HEADER = 64
 
 
 class Client:
     def __init__(self):
         self.client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.SERVER = h.SERVER
-        self.PORT = h.PORT
+        self.SERVER = "10.183.119.142"
+        self.PORT = 5050
         self.ADDR = (self.SERVER, self.PORT)
         self.client.connect(self.ADDR)
 

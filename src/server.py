@@ -13,7 +13,7 @@ class Server:
     def __init__(self):
         self.server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.PORT = h.PORT
-        self.SERVER = "192.168.2.108"#socket.gethostbyname(socket.gethostname())
+        self.SERVER = h.SERVER
         self.ADDR = (self.SERVER, self.PORT)
         self.server.bind(self.ADDR)
 

@@ -9,16 +9,16 @@ from pathlib import Path
 #
 PORT = 5050
 BUFFER_RADIUS = 50
-SERVER = "192.168.2.108"
+SERVER = "10.183.119.142"
 DATA_PATH = 'data/tracks'
 DATA_MOD_PATH = Path("data/mod")
 DATA_RESULTS = Path("data/results")
-# FILE_ALL_DATA = Path("data/results/all_data.csv")
-# FILE_ALL_TRACKS = Path("data/results/all_tracks.csv")
-# FILE_ALL_MODALITIES = Path("data/results/all_modalities.csv")
-FILE_ALL_DATA = Path("/Users/christoph/Dropbox/MDA_Projekt/Dashboard_presentation/all_data.csv")
-FILE_ALL_TRACKS = Path("/Users/christoph/Dropbox/MDA_Projekt/Dashboard_presentation/all_tracks.csv")
-FILE_ALL_MODALITIES = Path("/Users/christoph/Dropbox/MDA_Projekt/Dashboard_presentation/all_modalities.csv")
+FILE_ALL_DATA = Path("data/results/all_data.csv")
+FILE_ALL_TRACKS = Path("data/results/all_tracks.csv")
+FILE_ALL_MODALITIES = Path("data/results/all_modalities.csv")
+# FILE_ALL_DATA = Path("/Users/christoph/Dropbox/MDA_Projekt/Dashboard_presentation/all_data.csv")
+# FILE_ALL_TRACKS = Path("/Users/christoph/Dropbox/MDA_Projekt/Dashboard_presentation/all_tracks.csv")
+# FILE_ALL_MODALITIES = Path("/Users/christoph/Dropbox/MDA_Projekt/Dashboard_presentation/all_modalities.csv")
 FILE_TYPE = ('.csv', '.pkl')
 SAVE_PATH_MODEL = Path("data/model/rf_model.joblib")
 SAVE_PATH_MATRIX = Path("data/model/")  # Name and file type gets declared later (looping)

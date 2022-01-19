@@ -23,6 +23,8 @@ def track_importer(files):
             dats['modality_prec'] = modality_precision
             dats = dats.rename(columns={'latitude': 'longitude', 'longitude': 'latitude',  # bcuz mixed in data
                                         'speed': 'speed_gps'})
+            if 'altitude_gps' in dats.columns.tolist():
+                dats = dats.rename(columns={'altitude_gps': 'altitude'})
             dats = dats[['time', 'longitude', 'latitude', 'hdop', 'altitude', 'track_id', 'modality', 'speed_gps']]
         elif '.csv' in fp:  # --> import with London data:
             dats = pd.read_csv(fp)
